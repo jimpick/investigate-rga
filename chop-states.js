@@ -52,15 +52,45 @@ function makePosMap (decoded) {
 const [posMapChrome, idToPosChrome] = makePosMap(decodedChrome)
 const [posMapFirefox, idToPosFirefox] = makePosMap(decodedFirefox)
 
-for (let pos = 0; pos < posMapChrome.length; pos++) {
-  const { id } = posMapChrome[pos]
-  console.log('C:', pos, posMapChrome[pos], '=> F:', idToPosFirefox[id])
+function dumpMap (thisBrowser, thatBrowser, thisPosMap, thatIdToPos) {
+  const ranges = []
+  let startThisPos
+  let startThatPos
+  let lastThisPos
+  let lastThatPos = -1
+  let startId
+  let lastId
+
+  for (let pos = 0; pos < thisPosMap.length; pos++) {
+    const { id } = thisPosMap[pos]
+    /*
+    console.log(
+      `${thisBrowser}:`, pos, thisPosMap[pos],
+      `=> ${thatBrowser}:`, thatIdToPos[id]
+    )
+    */
+    if (thatIdToPos[id] !== lastThatPos + 1) {
+      if (startId) emit()
+      startId = id
+      startThisPos = pos
+      startThatPos = thatIdToPos[id]
+    }
+    lastThisPos = pos
+    lastThatPos = thatIdToPos[id]
+    lastId = id
+  }
+  emit()
+
+  function emit () {
+    console.log(
+      'Range:',
+      startId, '->', lastId,
+      `${thisBrowser}:${startThisPos}-${lastThisPos}`,
+      `${thatBrowser}:${startThatPos}-${lastThatPos}`
+    )
+  }
 }
 
+dumpMap('C', 'F', posMapChrome, idToPosFirefox)
 console.log()
-
-for (let pos = 0; pos < posMapFirefox.length; pos++) {
-  const { id } = posMapFirefox[pos]
-  console.log('F:', pos, posMapFirefox[pos], '=> C:', idToPosChrome[id])
-}
-
+dumpMap('F', 'C', posMapFirefox, idToPosChrome)
