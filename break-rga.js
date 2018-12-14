@@ -67,7 +67,7 @@ console.log('ABCDEFX (6):', rgaAbcdefx6.value().join(''))
 const rgaAbcdefy1 = RGA('abcdefy1')
 rgaAbcdefy1.apply(rgaAbc.state())
 rgaAbcdefy1.apply(rgaDef.state())
-const deltaY = rgaAbcdefy1.insertAt(3, 'y')
+const deltaY = rgaAbcdefy1.insertAt(3, 'Y')
 console.log('ABCDEFY (1):', rgaAbcdefy1.value().join(''))
 
 const rgaAbcdefy1a = RGA('abcdefy1a')
